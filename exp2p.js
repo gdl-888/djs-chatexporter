@@ -29,6 +29,8 @@ function appendFile(filename, content) {
 			return;
 		}
 	}); 
+	
+	fs.close();
 }
 
 appendFile(fn, `"사용자 번호","이름","메시지 번호","내용"\r\n`);
@@ -66,8 +68,18 @@ client.on('ready', () => {
 	print("\n메시지를 불러오는 중입니다.");
 	
 	var sid = '1';
+	var lid = '0';
 	
-	while(1) {
+	channel.fetchMessages({ limit: 1 }).then(messages => {
+		for(rmsg of messages) {
+			const cm = rmsg[1];
+			
+			lid = String(cm['id']);
+		}
+	
+	}).catch(console.error);
+	
+	for(var i=1; i<=10000; i++) {
 		channel.fetchMessages({ limit: 100, after: sid }).then(messages => {
 			var msgarr = [];
 			
@@ -79,8 +91,11 @@ client.on('ready', () => {
 				sid = cm['id'];
 			}
 		
-			input("계속 저장하려면 리턴글쇠를 누르십시오. . . ");
 		}).catch(console.error);
+		
+		if(Number(sid) > Number(lid)) break;
+		
+		input("계속 저장하려면 리턴글쇠를 누르십시오. . . ");
 	}
 	
 	print("\n" + fn + "에 저장되었읍니다.");
