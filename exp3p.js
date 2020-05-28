@@ -33,7 +33,28 @@ function appendFile(filename, content) {
 	// fs.close();
 }
 
-appendFile(fn, `"사용자 번호","이름","메시지 번호","내용"\r\n`);
+function convertMention(mention) {
+	var retval = mention;
+	
+	const matches = mention.match(/<@!?(\d+)>/g);
+
+	if (!matches) return mention;
+	
+	for(m of matches) {
+		try {
+			const id = m.match(/<@!?(\d+)>/)[1];
+			const us = client.users.find(user => user.id == id)['username'];
+			const dc = client.users.find(user => user.id == id)['discriminator'];
+			retval = retval.replace(m, `[@${us}#${dc}]`);
+		} catch(e) {}
+	}
+	
+	return retval;
+
+	//const id = matches[1];
+
+	//return client.users.find(user => user.id == id);
+}
 
 client.on('ready', async function() {
 	client.user.setPresence({
@@ -65,7 +86,7 @@ client.on('ready', async function() {
 	
 	chid = channel.id;
 	
-	print("\n메시지를 불러오는 중입니다.");
+	print("\n메시지를 불러오는 중입니다.\r\n");
 	
 	var sid = '1';
 	var lid = '0';
@@ -87,25 +108,54 @@ client.on('ready', async function() {
 					for(var msg of msgs) {
 						const cm = msg[1];
 						
-						msglst.push(`"(${cm['author']['id']})","${cm['author']['username'].replace(/["]/g, '""')}","(${cm['id']})","${cm['content'].replace(/["]/g, '""').replace(/\r/g, '')}"`);
+						var date = new Date(Number(cm['createdTimestamp']));
+
+						var hour = date.getHours();
+						hour = (hour < 10 ? "0" : "") + hour;
+
+						var min  = date.getMinutes();
+						min = (min < 10 ? "0" : "") + min;
+
+						var sec  = date.getSeconds();
+						sec = (sec < 10 ? "0" : "") + sec;
+
+						var year = date.getFullYear();
+
+						var month = date.getMonth() + 1;
+						month = (month < 10 ? "0" : "") + month;
+
+						var day  = date.getDate();
+						day = (day < 10 ? "0" : "") + day;
+
+						const tsp = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
+						
+						msglst.push([tsp, cm['author']['id'], cm['author']['username'].replace(/["]/g, '""'), cm['id'], convertMention(cm['content']).replace(/["]/g, '""').replace(/\r/g, ''), Number(cm['createdTimestamp'])]);
+						// msglst.push(`"(${cm['author']['id']})","${cm['author']['username'].replace(/["]/g, '""')}","(${cm['id']})","${cm['content'].replace(/["]/g, '""').replace(/\r/g, '')}"`);
 						
 						// sid = cm['id'];
 					}
 					
-					print(`(${sid} | ${lid})`);
+					if(sid != '1') print(`(${sid} / ${lid})`);
+					else print("\r\n처리 중입니다.\r\n");
 					
 					try {
 						sid = msgs.first()['id'];
 					} catch(e) {
 						var ac = '';
 						
+						print("\r\n시간 순으로 정렬하는 중입니다.\r\n");
+						
+						msglst.sort(function(l, r) {
+							return l[5] - r[5];
+						});
+						
 						for(var it of msglst) {
-							ac += it + "\r\n";
+							ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}"` + "\r\n";
 						}
 						
-						appendFile(fn, ac);
-						
-						print("\n" + fn + "에 저장되었읍니다.");
+						appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용"\r\n` + ac);
+				
+						print(`\r\n${fn}에 저장되었읍니다.`);
 						
 						return;
 					}
@@ -113,13 +163,19 @@ client.on('ready', async function() {
 					if(Number(sid) > Number(lid)) {
 						var ac = '';
 						
+						print("\r\n시간 순으로 정렬하는 중입니다.\r\n");
+						
+						msglst.sort(function(l, r) {
+							return l[5] - r[5];
+						});
+						
 						for(var it of msglst) {
-							ac += it + "\r\n";
+							ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}"` + "\r\n";
 						}
 						
-						appendFile(fn, ac);
-						
-						print("\n" + fn + "에 저장되었읍니다.");
+						appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용"\r\n` + ac);
+				
+						print(`\r\n${fn}에 저장되었읍니다.`);
 						
 						return;
 					}
@@ -127,15 +183,7 @@ client.on('ready', async function() {
 					time(i + 1);
 				}, 3000);
 			} else {
-				var ac = '';
-				
-				for(var it of msglst) {
-					ac += it + "\r\n";
-				}
-				
-				appendFile(fn, ac);
-				
-				print("\n" + fn + "에 저장되었읍니다.");
+				print("메시지가 너무 많습니다. 메시지가 12,345,678통 이하인 채널만 추출할 수 있읍니다.");
 				
 				return;
 			}
@@ -145,4 +193,4 @@ client.on('ready', async function() {
 	}).catch(console.error);
 });
 
-client.login("안녕!");
+client.login("defr4gtetyrsse");
