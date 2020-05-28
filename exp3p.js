@@ -129,7 +129,15 @@ client.on('ready', async function() {
 
 						const tsp = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
 						
-						msglst.push([tsp, cm['author']['id'], cm['author']['username'].replace(/["]/g, '""'), cm['id'], convertMention(cm['content']).replace(/["]/g, '""').replace(/\r/g, ''), Number(cm['createdTimestamp'])]);
+						var atm = '';
+						
+						for(var am of cm.attachments) {
+							atm += am[1]['url'] + ' ';
+						}
+						
+						if(atm == '') atm = '-';
+						
+						msglst.push([tsp, cm['author']['id'], cm['author']['username'].replace(/["]/g, '""'), cm['id'], convertMention(cm['content']).replace(/["]/g, '""').replace(/\r/g, ''), Number(cm['createdTimestamp']), atm]);
 						// msglst.push(`"(${cm['author']['id']})","${cm['author']['username'].replace(/["]/g, '""')}","(${cm['id']})","${cm['content'].replace(/["]/g, '""').replace(/\r/g, '')}"`);
 						
 						// sid = cm['id'];
@@ -150,10 +158,10 @@ client.on('ready', async function() {
 						});
 						
 						for(var it of msglst) {
-							ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}"` + "\r\n";
+							ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}","${it[6]}"` + "\r\n";
 						}
 						
-						appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용"\r\n` + ac);
+						appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용","붙임파일"\r\n` + ac);
 				
 						print(`\r\n${fn}에 저장되었읍니다.`);
 						
@@ -170,10 +178,10 @@ client.on('ready', async function() {
 						});
 						
 						for(var it of msglst) {
-							ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}"` + "\r\n";
+							ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}","${it[6]}"` + "\r\n";
 						}
 						
-						appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용"\r\n` + ac);
+						appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용","붙임파일"\r\n` + ac);
 				
 						print(`\r\n${fn}에 저장되었읍니다.`);
 						
