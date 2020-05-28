@@ -117,9 +117,22 @@ client.on('ready', async function() {
 	
 	chid = channel.id;
 	
+	var excludedUser = '';
 	
-	print("\n내보내기를 시작합니다. 취소하려면 3초 이내에 <Ctrl+C>을 누르십시오.\r\n");
-	print("        0          25        50        75       100 (%)");
+	switch(input("\r\n특정 사용자(한글불가)의 메시지를 제외할까요[Y/N]? ").toUpperCase()) {
+		case 'Y':
+			excludedUser = input("사용자 이름: ").toLowerCase();
+	}
+	
+	var excludedKeyword = '';
+	
+	switch(input("\r\n특정 문자열(한글불가)이 있는 메시지를 제외할까요[Y/N]? ").toUpperCase()) {
+		case 'Y':
+			excludedKeyword = input("키워드: ").toLowerCase();
+	}
+	
+	print("\r\n내보내기를 시작합니다. 취소하려면 3초 이내에 <Ctrl+C>을 누르십시오.\r\n");
+	print("        0         25        50        75        100 (%)");
 
 	var sid = '1';
 	var bid = '0'; // 채널의 첫 메시지 ID
@@ -144,15 +157,16 @@ client.on('ready', async function() {
 			const pb = new cliProgress.Bar({ // 진행율 표시기 생성
 				barIncompleteChar: '_',
 				barCompleteChar: '█',
-				format: '처리 중 [{bar}] ({percentage}%) {total} 중 {value} 완료 '
+				format: '처리 중 [{bar}] ({percentage}%) {total} 중 {value} 완료'
 			}, cliProgress.Presets.legacy);
 			
 			pb.start(Number(lid.slice(0, 7)) - Number(bid.slice(0, 7)), 0); // 진행율 표시기 시작
 			
 			// 이제 메시지들을 가장 오래된 것부터 가져온다.
-			var msglst = []; // 2차원 배열. 가져온 메시지들을 저장하고 나중에 화일로 저장하기.
-			var save = 0;
-			var msgcount = 0;
+			var msglst    = []; // 2차원 배열. 가져온 메시지들을 저장하고 나중에 화일로 저장하기.
+			var save      = 0;
+			var msgcount  = 0;
+			var excmsgcnt = 0;
 			
 			function time(i) {
 				// 메시지 개수 한계 지정. 높여도 됨. 너무 많이는 높이지 말 것.
@@ -166,6 +180,13 @@ client.on('ready', async function() {
 						
 						for(var msg of msgs) {
 							const cm = msg[1]; // 메시지 오브젝트
+							
+							if (
+								(cm.content.toLowerCase().includes(excludedKeyword) && excludedKeyword != '') ||
+								(cm.author.username.toLowerCase() == excludedUser && excludedUser != '')
+							) {
+								excmsgcnt++; continue;
+							}
 							
 							// 유닉스 시각을 가져와서 일반 시간으로 변환
 							var date = new Date(Number(cm['createdTimestamp']));
@@ -245,7 +266,7 @@ client.on('ready', async function() {
 							// 화일로 저장
 							appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용","반응","붙임파일"\r\n` + ac);
 					
-							print(`${msgcount}개의 메시지가 ${fn}에 저장되었읍니다.`);
+							print(`${excmsgcnt}개를 제외한 ${msgcount}개의 메시지가 ${fn}에 저장되었읍니다.`);
 							
 							return;
 						}
