@@ -2,7 +2,7 @@ const fs = require('fs'); // 화일시스템 라이브러리 가져오기
 const inputReader = require('wait-console-input') // 입력받는 라이브러리 가져오기
 
 const Discord = require('discord.js'); // DJS 라이브러리
-const Constants = require('discord.js/src/util/Constants.js'); // 안 씀.
+// const Constants = require('discord.js/src/util/Constants.js'); // 안 씀.
 
 const emoji = require('node-emoji'); // 반응을 텍스트로 변환
 
@@ -132,7 +132,7 @@ client.on('ready', async function() {
 	}
 	
 	print("\r\n내보내기를 시작합니다. 취소하려면 3초 이내에 <Ctrl+C>을 누르십시오.\r\n");
-	print("        0         25        50        75        100 (%)");
+	print("       0         25        50        75        100 (%)");
 
 	var sid = '1';
 	var bid = '0'; // 채널의 첫 메시지 ID
@@ -157,7 +157,7 @@ client.on('ready', async function() {
 			const pb = new cliProgress.Bar({ // 진행율 표시기 생성
 				barIncompleteChar: '_',
 				barCompleteChar: '█',
-				format: '처리 중 [{bar}] ({percentage}%) {total} 중 {value} 완료'
+				format: '처리중 [{bar}] ({percentage}%) {total} 중 {value} 완료'
 			}, cliProgress.Presets.legacy);
 			
 			pb.start(Number(lid.slice(0, 7)) - Number(bid.slice(0, 7)), 0); // 진행율 표시기 시작
@@ -267,6 +267,7 @@ client.on('ready', async function() {
 							appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용","반응","붙임파일"\r\n` + ac);
 					
 							print(`${excmsgcnt}개를 제외한 ${msgcount}개의 메시지가 ${fn}에 저장되었읍니다.`);
+							print('창을 닫아도 좋습니다.');
 							
 							return;
 						}
@@ -277,7 +278,7 @@ client.on('ready', async function() {
 				} else {
 					// 한도 초과 시..
 					
-					print("메시지가 너무 많습니다. 메시지가 12,345,678통 이하인 채널만 내보낼 수 있읍니다.");
+					print("메시지가 너무 많습니다. 메시지가 1,234,567,799통 이하인 채널만 내보낼 수 있읍니다.");
 					
 					return;
 				}
