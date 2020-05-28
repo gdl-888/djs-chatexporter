@@ -76,34 +76,51 @@ client.on('ready', async function() {
 		status: "invisible"
 	});
 	
-	var s = 1;
+	var s  = 1;
+	var sl = [];
 	
 	for(server of client.guilds.array())
 		{
-			print(`[${s++}] ${server['name']}`);
+			print(`[${s}] ${server['name']}`);
+			sl.push(s++);
 		}
 	
 	var guildname = input("대상 서버: ");
+		
+	if(!sl.includes(Number(guildname))) {
+		print('\r\n서버가 존재하지 않습니다.');
+		return;
+	}
+	
 	var guild = client.guilds.array()[Number(guildname) - 1];
 	prt('\r\n');
 	
-	var c = 0;
+	var c  = 0;
+	var cl = [];
 	
 	for(ch of guild.channels.array())
 		{
 			if(ch['type'] == 'category') { c++; continue; }
 			if(ch['type'] == 'voice') { c++; continue; }
-			print(`[${c++}] ${ch['name']}`);
+			print(`[${c}] ${ch['name']}`);
+			cl.push(c++);
 		}
 		
 	var chname = input("대상 채널: ");
+		
+	if(!cl.includes(Number(chname))) {
+		print('\r\n채널이 사용가능하지 않습니다.');
+		return;
+	}
+	
 	var channel = guild.channels.array()[chname];
 	
 	chid = channel.id;
 	
 	
 	print("\n내보내기를 시작합니다. 취소하려면 3초 이내에 <Ctrl+C>을 누르십시오.\r\n");
-	
+	print("        0          25        50        75       100 (%)");
+
 	var sid = '1';
 	var bid = '0'; // 채널의 첫 메시지 ID
 	var lid = '0'; // 채널의 가장 마지막 메시지 ID
@@ -116,6 +133,7 @@ client.on('ready', async function() {
 			lid = String(cm['id']);
 		}
 		
+		// 가장 첫 1개의 메시지를 가져와서 그것의 ID를 bid에 저장
 		channel.fetchMessages({ limit: 1, after: '1' }).then(async function(messages) {
 			for(rmsg of messages) {
 				const cm = rmsg[1];
@@ -126,7 +144,7 @@ client.on('ready', async function() {
 			const pb = new cliProgress.Bar({ // 진행율 표시기 생성
 				barIncompleteChar: '_',
 				barCompleteChar: '█',
-				format: '[{bar}] ({percentage}%) / {total} 중 {value} 완료. '
+				format: '처리 중 [{bar}] ({percentage}%) {total} 중 {value} 완료 '
 			}, cliProgress.Presets.legacy);
 			
 			pb.start(Number(lid.slice(0, 7)) - Number(bid.slice(0, 7)), 0); // 진행율 표시기 시작
