@@ -30,7 +30,7 @@ function appendFile(filename, content) {
 		}
 	}); 
 	
-	fs.close();
+	// fs.close();
 }
 
 appendFile(fn, `"사용자 번호","이름","메시지 번호","내용"\r\n`);
