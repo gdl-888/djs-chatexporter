@@ -102,7 +102,7 @@ client.on('ready', async function() {
 	chid = channel.id;
 	
 	
-	print("\n내보내기를 시작합니다.\r\n");
+	print("\n내보내기를 시작합니다. 취소하려면 3초 이내에 <Ctrl+C>을 누르십시오.\r\n");
 	
 	var sid = '1';
 	var bid = '0'; // 채널의 첫 메시지 ID
@@ -134,6 +134,7 @@ client.on('ready', async function() {
 			// 이제 메시지들을 가장 오래된 것부터 가져온다.
 			var msglst = []; // 2차원 배열. 가져온 메시지들을 저장하고 나중에 화일로 저장하기.
 			var save = 0;
+			var msgcount = 0;
 			
 			function time(i) {
 				// 메시지 개수 한계 지정. 높여도 됨. 너무 많이는 높이지 말 것.
@@ -193,6 +194,8 @@ client.on('ready', async function() {
 							// msglst.push(`"(${cm['author']['id']})","${cm['author']['username'].replace(/["]/g, '""')}","(${cm['id']})","${cm['content'].replace(/["]/g, '""').replace(/\r/g, '')}"`);
 							
 							// sid = cm['id'];
+							
+							msgcount++;
 						}
 						
 						// if(sid != '1') print(`(${sid} / ${lid})`); // sid와 lid 정보 표시
@@ -224,7 +227,7 @@ client.on('ready', async function() {
 							// 화일로 저장
 							appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용","반응","붙임파일"\r\n` + ac);
 					
-							print(`${fn}에 저장되었읍니다.`);
+							print(`${msgcount}개의 메시지가 ${fn}에 저장되었읍니다.`);
 							
 							return;
 						}
@@ -247,4 +250,4 @@ client.on('ready', async function() {
 });
 
 // 여기에 봇 토큰 입력. 실제계정 토큰으로 지정해서 벌어지는 일과 불이익에 대해서 책임지지 않습니다. 가능하면 봇 계정으로 할 것.
-client.login("defr4gtetyrsse");
+client.login("...");
