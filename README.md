@@ -24,4 +24,4 @@ MS 오피스로 열 경우 인코딩을 ANSI(정확히는 ANSI가 아니라 EUC-
 - https://www.npmjs.com/package/cli-progress
 - https://www.npmjs.com/package/wait-console-input
 - https://www.npmjs.com/package/node-emoji
-- https://www.npmjs.com/package/readline
+- readline
