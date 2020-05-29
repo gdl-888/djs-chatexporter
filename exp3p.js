@@ -125,7 +125,7 @@ client.on('ready', async function() {
 		output: process.stdout
 	});
 	
-	rl.question("제외할 사용자 이름(없으면 빈칸): ", (answer) => {
+	rl.question("\r\n제외할 사용자 이름(없으면 빈칸): ", (answer) => {
 		excludedUser = answer.toLowerCase();
 		
 		rl.close();
@@ -244,7 +244,7 @@ client.on('ready', async function() {
 										for(var chr=0; chr<cm['content'].length-1; chr++) {
 											const emj = String(cm['content'][chr]) + String(cm['content'][chr+1]);
 											
-											if(emoji.hasEmoji(emj)) {
+											if(emoji.hasEmoji(emj) && emoji.find(emj)['key'] != emj) {
 												msgcntnt = msgcntnt.replace(emj, ':' + emoji.find(emj)['key'] + ':')
 											}
 										}
@@ -305,7 +305,7 @@ client.on('ready', async function() {
 								
 								// 다음 100개 메시지 가져오기
 								time(i + 1);
-							}, 3000); // 3000: 3초.(밀리초 단위) | 조금은 줄여도 되지만 봇이 차단될 경우 책임지지 않습니다.
+							}, 1500); // 1500: 1.5초.(밀리초 단위) | 조금은 줄여도 되지만 봇이 차단될 경우 책임지지 않습니다.
 						} else {
 							// 한도 초과 시..
 							
