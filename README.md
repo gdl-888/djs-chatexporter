@@ -20,6 +20,8 @@ MS 오피스로 열 경우 인코딩을 ANSI(정확히는 ANSI가 아니라 EUC-
 
 메시지가 약 5,000개인 채널은 약 3분 소요.
 
+1초로 설정했을 때 2,000개인 채널은 약 15초 소요.
+
 ## 사용된 외부 라이브러리
 - https://www.npmjs.com/package/cli-progress
 - https://www.npmjs.com/package/wait-console-input
