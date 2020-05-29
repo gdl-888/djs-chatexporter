@@ -237,8 +237,30 @@ client.on('ready', async function() {
 									
 									if(atm == '') atm = '-'; // 없으면 -로
 									
+									var msgcntnt = cm['content'];
+									
+									// 이모티콘 변환(유니코드 안되는 윈도우 사용자 배려)
+									if(!cm['embeds'].length && !cm['system'] && cm['content'].length >= 2) {
+										for(var chr=0; chr<cm['content'].length-1; chr++) {
+											const emj = String(cm['content'][chr]) + String(cm['content'][chr+1]);
+											
+											if(emoji.hasEmoji(emj)) {
+												msgcntnt = msgcntnt.replace(emj, ':' + emoji.find(emj)['key'] + ':')
+											}
+										}
+									}
+									if(cm['embeds'].length && cm['author']['bot']) {
+										msgcntnt = `[임베드] `;
+										for(var embed of cm['embeds']) {
+											msgcntnt += `${embed['title']}: ${embed['description']}   `;
+										}
+									}
+									if(cm['system']) {
+										msgcntnt = '[시스템] 메시지를 고정했거나 서버를 부스트했거나 서버에 참가함.';
+									}
+									
 									// msglst에 메시지 정보를 담은 배열 저장. [시간, 사용자ID, 사용자이름, 메시지ID, 메시지내용, 유닉스시간, 첨부화일 주소목록, 반응]
-									msglst.push([tsp, cm['author']['id'], cm['author']['username'].replace(/["]/g, '""'), cm['id'], convertMention(cm['content']).replace(/["]/g, '""').replace(/\r/g, ''), Number(cm['createdTimestamp']), atm, rec]);
+									msglst.push([tsp, cm['author']['id'], cm['author']['username'].replace(/["]/g, '""'), cm['id'], convertMention(msgcntnt).replace(/["]/g, '""').replace(/\r/g, ''), Number(cm['createdTimestamp']), atm, rec]);
 									// msglst.push(`"(${cm['author']['id']})","${cm['author']['username'].replace(/["]/g, '""')}","(${cm['id']})","${cm['content'].replace(/["]/g, '""').replace(/\r/g, '')}"`);
 									
 									// sid = cm['id'];
