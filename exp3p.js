@@ -232,10 +232,10 @@ client.on('ready', async function() {
 									}
 									
 									for(var am of cm.attachments) {
-										atm += am[1]['url'] + ' '; // attachments 콜랙션에서 하나씩 추가
+										atm += ` [파일 ${am[1]['url']}]`; // attachments 콜랙션에서 하나씩 추가
 									}
 									
-									if(atm == '') atm = '-'; // 없으면 -로
+									// if(atm == '') atm = '-'; // 없으면 -로
 									
 									var msgcntnt = cm['content'];
 									
@@ -256,7 +256,14 @@ client.on('ready', async function() {
 										}
 									}
 									if(cm['system']) {
-										msgcntnt = '[시스템] 메시지를 고정했거나 서버를 부스트했거나 서버에 참가함.';
+										switch(cm['type']) {
+											case 'GUILD_MEMBER_JOIN':
+												msgcntnt = '[시스템] 서버에 참가함.';
+											break;case 'PINS_ADD':
+												msgcntnt = '[시스템] 메시지를 고정함.';
+											break;default:
+												msgcntnt = '[시스템] 서버를 부스트했거나 채널 이름이나 아이콘을 변경, 혹은 통화를 시작함.';
+										}
 									}
 									
 									// msglst에 메시지 정보를 담은 배열 저장. [시간, 사용자ID, 사용자이름, 메시지ID, 메시지내용, 유닉스시간, 첨부화일 주소목록, 반응]
@@ -291,11 +298,11 @@ client.on('ready', async function() {
 									
 									for(var it of msglst) {
 										// ac에 CSV 행 추가
-										ac += `"${it[0]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}","${it[7]}","${it[6]}"` + "\r\n";
+										ac += `"${it[0]}","'${it[5]}","'${it[1]}","${it[2]}","'${it[3]}","${it[4]}${it[6]}","${it[7]}"` + "\r\n";
 									}
 									
 									// 화일로 저장
-									appendFile(fn, `"타임스탬프","사용자 번호","이름","메시지 번호","내용","반응","붙임파일"\r\n` + ac);
+									appendFile(fn, `"전송 시간","타임스탬프","사용자 번호","이름","메시지 번호","내용","반응"\r\n` + ac);
 							
 									print(`${excmsgcnt}개를 제외한 ${msgcount}개의 메시지가 ${fn}에 저장되었읍니다.`);
 									print('창을 닫아도 좋습니다.');
