@@ -119,7 +119,7 @@ client.once('ready', async function() {
 	
 	print('[1] CSV');
 	print('[2] HTML');
-	print('[0] 모두');
+	print('[0] 모두(All)');
 	
 	var fmt = Number(input('저장 형식(모르면 2): ')) || 0;
 	var html = `
