@@ -4,6 +4,7 @@
 Exports your Discord channel's messages.
 
 Windows 7/Node.js 6.0 이상이라면 3 혹은 4 이상의 짝수 버전을, Windows XP/Node.js 5.12.0 환경이라면 5 이상의 홀수 버전을 사용하십시오. 버전 4 이상에서 버전 번호가 짝수인 것과 홀수인 것은 서로 다른 프로그램입니다.
+
 For Windows 7/Node.js 6.0 or higher, use version 3 or an even-numbered version of 4 or higher, and for Windows XP/Node.js 5.12.0, use an odd-numbered version of 5 or higher. In version 4 and later, even and odd version numbers are completely different programs.
 
 ## 추출 후 처리할 작업
