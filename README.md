@@ -3,14 +3,8 @@
 디스코드 채팅을 내보내준다.  
 Exports your Discord channel's messages.
 
-exp1.js: **사용하지 말 것.** 개발중인 버전이였고 엉망(...)이다.  
-exp1.js is the first version that is kinda broken.
-
-exp2.js: **사용하지 말 것.** 100개의 메시지를 저장할 때마다 엔터를 눌러야 한다. 그리고 너무 빨리씩 누르면 API 스팸으로 일시 차단될 수 있으므로 주의. 차단은 이틀에서 사흘 후면 풀린다. 그리고 이 코드는 정렬이 아직 되지 않는다.  
-exp2.js is the second version which requires a little manuel controls, and does not sort the messages (by time).
-
-exp3.js: 3초마다 100개씩 메시지를 불러온다.(자동으로 처리)  
-exp3.js is the latest version.
+Windows 7/Node.js 6.0 이상이라면 3 혹은 4 이상의 짝수 버전을, Windows XP/Node.js 5.12.0 환경이라면 5 이상의 홀수 버전을 사용하십시오. 버전 4 이상에서 버전 번호가 짝수인 것과 홀수인 것은 서로 다른 프로그램입니다.
+For Windows 7/Node.js 6.0 or higher, use version 3 or an even-numbered version of 4 or higher, and for Windows XP/Node.js 5.12.0, use an odd-numbered version of 5 or higher. In version 4 and later, even and odd version numbers are completely different programs.
 
 ## 추출 후 처리할 작업
 MS 오피스로 열 경우 인코딩을 ANSI(정확히는 ANSI가 아니라 CP949 등)로 바꾸어 주어야 한다.  
