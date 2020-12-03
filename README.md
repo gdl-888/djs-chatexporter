@@ -3,9 +3,16 @@
 디스코드 채팅을 내보내준다.  
 Exports your Discord channel's messages.
 
-Windows 7/Node.js 6.0 이상이라면 3 혹은 4 이상의 짝수 버전을, Windows XP/Node.js 5.12.0 환경이라면 5 이상의 홀수 버전을 사용하십시오. 버전 4 이상에서 버전 번호가 짝수인 것과 홀수인 것은 서로 다른 프로그램입니다.
+버전 6(exp6.js) 이상을 사용하십시오.. Node.js 5.0 이상 버전이 필요합니다. Node.js 6.0 미만이어서 Discord.js 버전 11 설치가 불가능하다면 [이 포팅된 버전](https://github.com/turbo-whistler/djs11-node5)을 사용하십시오.
 
-For Windows 7/Node.js 6.0 or higher, use version 3 or an even-numbered version of 4 or higher, and for Windows XP/Node.js 5.12.0, use an odd-numbered version of 5 or higher. In version 4 and later, even and odd version numbers are completely different programs.
+Use version 6(exp6.js) or higher. Node.js >= 5.0 required. If you're using Node.js < 6.0 because Node.js 6 dropped support for XP and vista, and cannot install DJS v11, use [this](https://github.com/turbo-whistler/djs11-node5) ported version.
+
+## npm
+```
+npm i djs11@npm:discord.js@11.6.4
+npm i cli-progress (cli-progress@1.8.0 if you're using Node.js < 6)
+npm i node-emoji
+```
 
 ## 추출 후 처리할 작업
 MS 오피스로 열 경우 인코딩을 ANSI(정확히는 ANSI가 아니라 CP949 등)로 바꾸어 주어야 한다.  
