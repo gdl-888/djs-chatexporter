@@ -2,6 +2,7 @@
 npm i djs11@npm:discord.js@11.6.4
 npm i cli-progress (cli-progress@1.8.0 if you're using Node.js < 6)
 npm i node-emoji
+npm i deasync
 */
 
 const fs = require('fs'); // 화일시스템 라이브러리 가져오기
@@ -100,11 +101,10 @@ client.once('ready', function() {
     var s  = 1;
     var sl = [];
     
-    for(server of client.guilds.array())
-        {
-            print(`[${s}] ${server['name']}`);
-            sl.push(s++);
-        }
+    for(server of client.guilds.array()) {
+		print(`[${s}] ${server['name']}`);
+		sl.push(s++);
+	}
     
     input("대상 서버: ").then(guildname => {
 		if(!sl.includes(Number(guildname))) {
@@ -118,13 +118,12 @@ client.once('ready', function() {
 		var c  = 0;
 		var cl = [];
 		
-		for(ch of guild.channels.array())
-			{
-				if(ch['type'] == 'category') { c++; continue; }
-				if(ch['type'] == 'voice') { c++; continue; }
-				print(`[${c}] ${ch['name']}`);
-				cl.push(c++);
-			}
+		for(ch of guild.channels.array()) {
+			if(ch['type'] == 'category') { c++; continue; }
+			if(ch['type'] == 'voice') { c++; continue; }
+			print(`[${c}] ${ch['name']}`);
+			cl.push(c++);
+		}
 			
 		input("대상 채널: ").then(chname => {
 			if(!cl.includes(Number(chname))) {
@@ -136,7 +135,7 @@ client.once('ready', function() {
 			
 			print('[1] CSV');
 			print('[2] HTML');
-			print('[0] 모두');
+			print('[0] 모두(All)');
 			
 			input('저장 형식(모르면 2): ').then(inpinp => {
 				var fmt = Number(inpinp) || 0;
@@ -198,7 +197,7 @@ client.once('ready', function() {
 				
 				chid = channel.id;
 				
-				fn = guild.name + '-' + channel.name + '(' + (String(new Date().getFullYear()).slice(2, 4)) + (new Date().getMonth() + 1) + new Date().getDate() + ').CSV';
+				fn = guild.name + '-' + channel.name + '(' + (String(new Date().getFullYear()).slice(2, 4)) + '.' + (new Date().getMonth() + 1) + '.' + new Date().getDate() + ').CSV';
 				
 				var excludedUser = '';
 				
@@ -242,7 +241,7 @@ client.once('ready', function() {
 								
 								// 가장 첫 1개의 메시지를 가져와서 그것의 ID를 bid에 저장
 								channel.fetchMessages({ limit: 1, after: '1' }).then(function(messages) {
-									if(fromst) {
+									if(fromst >= 2) {
 										bid = String(fromst);
 									} else {
 										for(rmsg of messages) {
