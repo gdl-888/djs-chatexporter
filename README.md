@@ -12,7 +12,6 @@ Use version 6(exp6.js) or higher. Node.js >= 5.0 required. If you're using Node.
 npm i djs11@npm:discord.js@11.6.4
 npm i cli-progress (cli-progress@1.8.0 if you're using Node.js < 6)
 npm i node-emoji
-npm i deasync
 ```
 
 ## 추출 후 처리할 작업
