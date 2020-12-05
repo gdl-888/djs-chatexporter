@@ -351,7 +351,7 @@ client.once('ready', function() {
 													if(cm['embeds'].length && cm['author']['bot']) {
 														msgcntnt = `[임베드] `;
 														for(var embed of cm['embeds']) {
-															msgcntnt += `${embed['title']}: ${embed['description']}   `;
+															msgcntnt += `${embed['title'] || cm.author.username}: ${embed['description']}   `;
 														}
 													}
 													if(cm['system']) {
@@ -379,7 +379,34 @@ client.once('ready', function() {
 													}
 													
 													var admin = 0;
-													try {
+													
+													cm.member.roles.forEach(role => {
+														const Permissions = DJS11.Permissions;
+														const perm = new Permissions(Number(role.permissions));
+														
+														if(
+															perm.any(['ADMINISTRATOR', 
+																		'KICK_MEMBERS', 
+																		'BAN_MEMBERS', 
+																		'MANAGE_CHANNELS', 
+																		'MANAGE_GUILD', 
+																		'PRIORITY_SPEAKER',
+																		'MANAGE_MESSAGES',
+																		'MUTE_MEMBERS', 
+																		'DEAFEN_MEMBERS', 
+																		'MOVE_MEMBERS',
+																		'MANAGE_NICKNAMES',
+																		'MANAGE_ROLES',
+																		'MANAGE_WEBHOOKS',
+																		'MANAGE_EMOJIS']) ||
+															
+															cm.author.id == cm.guild.ownerID
+														) {
+															admin = 1;
+														}
+													});
+													
+													/*
 													const roles = cm.member._roles;
 													for(role of roles) {
 														const trole = cm.guild.roles.find(r => r.id == role);
@@ -388,31 +415,30 @@ client.once('ready', function() {
 														const perm = new Permissions(perms);
 
 														if(
-															perm.has(['ADMINISTRATOR']) ||
-															perm.has(['KICK_MEMBERS']) ||
-															perm.has(['BAN_MEMBERS']) ||
-															perm.has(['MANAGE_CHANNELS']) ||
-															perm.has(['MANAGE_GUILD']) ||
-															perm.has(['PRIORITY_SPEAKER']) ||
-															perm.has(['MANAGE_MESSAGES']) ||
-															perm.has(['MUTE_MEMBERS']) ||
-															perm.has(['DEAFEN_MEMBERS']) ||
-															perm.has(['MOVE_MEMBERS']) ||
-															perm.has(['MANAGE_NICKNAMES']) ||
-															perm.has(['MANAGE_ROLES']) ||
-															perm.has(['MANAGE_ROLES_OR_PERMISSIONS']) ||
-															perm.has(['MANAGE_WEBHOOKS']) ||
-															perm.has(['MANAGE_EMOJIS']) ||
+															perm.any(['ADMINISTRATOR', 
+																		'KICK_MEMBERS', 
+																		'BAN_MEMBERS', 
+																		'MANAGE_CHANNELS', 
+																		'MANAGE_GUILD', 
+																		'PRIORITY_SPEAKER',
+																		'MANAGE_MESSAGES',
+																		'MUTE_MEMBERS', 
+																		'DEAFEN_MEMBERS', 
+																		'MOVE_MEMBERS',
+																		'MANAGE_NICKNAMES',
+																		'MANAGE_ROLES',
+																		'MANAGE_WEBHOOKS',
+																		'MANAGE_EMOJIS']) ||
 															
-															cm.member.user.id == cm.guild.owner.user.id
+															cm.author.id == cm.guild.ownerID
 														) {
 															admin = 1;
 														}
 													}
-													} catch(e) {}
+													*/
 													
 													var io;
-													try { io = cm.member.user.id == cm.guild.owner.user.id ? 1 : 0; } catch(e) { io = 0; }
+													try { io = cm.author.id == cm.guild.ownerID ? 1 : 0; } catch(e) { io = 0; }
 													
 													// msglst에 메시지 정보를 담은 배열 저장. [시간, 사용자ID, 사용자이름, 메시지ID, 메시지내용, 유닉스시간, 첨부화일 주소목록, 반응]
 													msglst.push([tsp, cm['author']['id'], cm['author']['username'].replace(/["]/g, '""'), cm['id'], convertMention(msgcntnt).replace(/["]/g, '""').replace(/\r/g, ''), Number(cm['createdTimestamp']), atm, rec, cm['system'] ? 1 : 0, admin, io, rr, raw, imgb64]);
